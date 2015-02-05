@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Web;
 using System.Web.Caching;
 
@@ -27,7 +29,22 @@ namespace EmbeddedResourceVirtualPathProvider
                 }
             }
             GetCacheDependency = (utcStart) => new CacheDependency(assembly.Location);
-            GetStream = () => assembly.GetManifestResourceStream(resourcePath);
+
+
+						GetStream = () =>
+						{
+							var assemblyName = assembly.GetName().Name;
+							var resourceSource = assemblyName + ".g.resources";
+							var stream = new ResourceReader(assembly.GetManifestResourceStream(resourceSource));
+							foreach(DictionaryEntry resource in stream)
+							{
+								if (resource.Key.ToString() == resourcePath)
+								{
+									return (Stream)resource.Value;
+								}
+							}
+							return null;
+						};
         }
 
         public DateTime AssemblyLastModified { get; private set; }
@@ -48,8 +65,7 @@ namespace EmbeddedResourceVirtualPathProvider
                     projectSourcePath =
                         new DirectoryInfo((Path.Combine(HttpRuntime.AppDomainAppPath, projectSourcePath))).FullName;
                 }
-                var fileName = Path.Combine(projectSourcePath,
-                                            resourcePath.Substring(assembly.GetName().Name.Length + 1).Replace('.', '\\'));
+                var fileName = Path.Combine(projectSourcePath,resourcePath);
 
 
                 return GetFileName(fileName);

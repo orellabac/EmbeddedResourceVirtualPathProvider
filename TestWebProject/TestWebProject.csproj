@@ -19,6 +19,10 @@
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
     <UpgradeBackupLocation />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,9 +79,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmbeddedResourceVirtualPathProvider\EmbeddedResourceVirtualPathProvider.csproj">
+    <ProjectReference Include="..\EmbeddedResourceVirtualPathProvider\ResourceVirtualPathProvider.csproj">
       <Project>{6298C7D0-B42C-4014-B5DF-E2A871832A3F}</Project>
-      <Name>EmbeddedResourceVirtualPathProvider</Name>
+      <Name>ResourceVirtualPathProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestResourceLibrary\TestResourceLibrary.csproj">
       <Project>{F220C6EC-A85F-41C4-BA6E-C92921DE318F}</Project>

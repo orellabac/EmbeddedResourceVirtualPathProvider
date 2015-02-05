@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F220C6EC-A85F-41C4-BA6E-C92921DE318F}</ProjectGuid>
+    <ProjectGuid>{6298C7D0-B42C-4014-B5DF-E2A871832A3F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestResourceLibrary</RootNamespace>
-    <AssemblyName>TestResourceLibrary</AssemblyName>
+    <RootNamespace>EmbeddedResourceVirtualPathProvider</RootNamespace>
+    <AssemblyName>EmbeddedResourceVirtualPathProvider</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,26 +33,30 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.4.1\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Marker.cs" />
+    <Compile Include="EmbeddedResource.cs" />
+    <Compile Include="EmbeddedResourceCacheControl.cs" />
+    <Compile Include="EmbeddedResourceVirtualFile.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Vpp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="alert.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="alert2.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Scripts\alert.3.js" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

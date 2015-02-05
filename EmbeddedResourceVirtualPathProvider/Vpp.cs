@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.Hosting;
 using System.Linq;
+using System.Resources;
 
 namespace EmbeddedResourceVirtualPathProvider
 {
@@ -28,13 +29,21 @@ namespace EmbeddedResourceVirtualPathProvider
         public void Add(Assembly assembly, string projectSourcePath = null)
         {
             var assemblyName = assembly.GetName().Name;
-            foreach (var resourcePath in assembly.GetManifestResourceNames().Where(r => r.StartsWith(assemblyName)))
-            {
-                var key = resourcePath.ToUpperInvariant().Substring(assemblyName.Length).TrimStart('.');
-                if (!resources.ContainsKey(key))
-                    resources[key] = new List<EmbeddedResource>();
-                resources[key].Insert(0, new EmbeddedResource(assembly, resourcePath, projectSourcePath));
-            }
+					  var resourceSource = assembly.GetManifestResourceNames().FirstOrDefault(x => x == assemblyName + ".g.resources");
+						if (resourceSource != null)
+						{
+							var stream = new ResourceReader(assembly.GetManifestResourceStream(resourceSource));
+							var resourceNames = (from DictionaryEntry resource in stream select resource.Key.ToString()).ToArray();
+
+							foreach (var res in resourceNames)
+							{
+								var key = res;
+
+								if (!resources.ContainsKey(key))
+									resources[key] = new List<EmbeddedResource>();
+								resources[key].Insert(0, new EmbeddedResource(assembly, res, projectSourcePath));
+							}
+						}
         }
  
         public override bool FileExists(string virtualPath)
@@ -81,8 +90,8 @@ namespace EmbeddedResourceVirtualPathProvider
                 var folder = path.Substring(0, index).Replace("-", "_"); //embedded resources with "-"in their folder names are stored as "_".
                 path = folder + path.Substring(index);
             }
-            var cleanedPath = path.Replace('/', '.');
-            var key = (cleanedPath).ToUpperInvariant();
+            var cleanedPath = path;
+            var key = (cleanedPath).ToLowerInvariant();
             if (resources.ContainsKey(key))
             {
                 var resource = resources[key].FirstOrDefault(UseResource);
