@@ -5,13 +5,9 @@
     <version>1.0.0</version>
     <authors>orellabac,dalvarez</authors>
     <owners>orellabac</owners>
-    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <projectUrl>https://github.com/orellabac/ResourceVirtualPathProvider</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Package description</description>
-    <releaseNotes>Summary of changes made in this release of the package.</releaseNotes>
-    <copyright>Copyright 2015</copyright>
+    <description>Enables ASP.NET to read content files (e.g. .css, .js, .aspx) stored as resources in referenced assemblies</description>
     <tags>MVC ASP.NET VirtualPath Provider</tags>
   </metadata>
 </package>
