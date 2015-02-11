@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EmbeddedResourceVirtualPathProvider")]
-[assembly: AssemblyDescription("Enables ASP to read content files (e.g. .css, .js, .aspx) stored as embedded resources in referenced assemblies")]
+[assembly: AssemblyTitle("ResourceVirtualPathProvider")]
+[assembly: AssemblyDescription("Enables ASP to read content files (e.g. .css, .js, .aspx) stored as resources in referenced assemblies")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Harry McIntyre")]
-[assembly: AssemblyProduct("EmbeddedResourceVirtualPathProvider")]
+[assembly: AssemblyProduct("ResourceVirtualPathProvider")]
 [assembly: AssemblyCopyright("Copyright © Harry McIntyre 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

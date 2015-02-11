@@ -79,7 +79,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmbeddedResourceVirtualPathProvider\ResourceVirtualPathProvider.csproj">
+    <ProjectReference Include="..\ResourceVirtualPathProvider\ResourceVirtualPathProvider.csproj">
       <Project>{6298C7D0-B42C-4014-B5DF-E2A871832A3F}</Project>
       <Name>ResourceVirtualPathProvider</Name>
     </ProjectReference>

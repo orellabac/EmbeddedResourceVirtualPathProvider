@@ -1,5 +1,5 @@
 ﻿using System.Web.Hosting;
-using EmbeddedResourceVirtualPathProvider;
+using ResourceVirtualPathProvider;
 using TestResourceLibrary;
 
 namespace TestWebProject.App_Code
@@ -8,7 +8,7 @@ namespace TestWebProject.App_Code
     {
         public static void AppInitialize()
         {
-            HostingEnvironment.RegisterVirtualPathProvider(new EmbeddedResourceVirtualPathProvider.Vpp()
+            HostingEnvironment.RegisterVirtualPathProvider(new ResourceVirtualPathProvider.Vpp()
             {
                 {typeof (Marker).Assembly, @"..\TestResourceLibrary"},
 

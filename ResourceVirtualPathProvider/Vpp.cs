@@ -8,11 +8,11 @@ using System.Web.Hosting;
 using System.Linq;
 using System.Resources;
 
-namespace EmbeddedResourceVirtualPathProvider
+namespace ResourceVirtualPathProvider
 {
     public class Vpp : VirtualPathProvider, IEnumerable
     {
-        readonly IDictionary<string, List<EmbeddedResource>> resources = new Dictionary<string, List<EmbeddedResource>>();
+        readonly IDictionary<string, List<Resource>> _resources = new Dictionary<string, List<Resource>>();
 
         public Vpp(params Assembly[] assemblies)
         {
@@ -22,9 +22,9 @@ namespace EmbeddedResourceVirtualPathProvider
             CacheControl = er => null;
         }
 
-        public Func<EmbeddedResource, bool> UseResource { get; set; }
-        public Func<EmbeddedResource, bool> UseLocalIfAvailable { get; set; }
-        public Func<EmbeddedResource, EmbeddedResourceCacheControl> CacheControl { get; set; } 
+        public Func<Resource, bool> UseResource { get; set; }
+        public Func<Resource, bool> UseLocalIfAvailable { get; set; }
+        public Func<Resource, ResourceCacheControl> CacheControl { get; set; } 
 
         public void Add(Assembly assembly, string projectSourcePath = null)
         {
@@ -32,16 +32,20 @@ namespace EmbeddedResourceVirtualPathProvider
 					  var resourceSource = assembly.GetManifestResourceNames().FirstOrDefault(x => x == assemblyName + ".g.resources");
 						if (resourceSource != null)
 						{
-							var stream = new ResourceReader(assembly.GetManifestResourceStream(resourceSource));
-							var resourceNames = (from DictionaryEntry resource in stream select resource.Key.ToString()).ToArray();
-
-							foreach (var res in resourceNames)
+							var resourceStream = assembly.GetManifestResourceStream(resourceSource);
+							if (resourceStream != null)
 							{
-								var key = res;
+								var stream = new ResourceReader(resourceStream);
+								var resourceNames = (from DictionaryEntry resource in stream select resource.Key.ToString()).ToArray();
 
-								if (!resources.ContainsKey(key))
-									resources[key] = new List<EmbeddedResource>();
-								resources[key].Insert(0, new EmbeddedResource(assembly, res, projectSourcePath));
+								foreach (var res in resourceNames)
+								{
+									var key = res;
+
+									if (!_resources.ContainsKey(key))
+										_resources[key] = new List<Resource>();
+									_resources[key].Insert(0, new Resource(assembly, res, projectSourcePath));
+								}
 							}
 						}
         }
@@ -56,7 +60,7 @@ namespace EmbeddedResourceVirtualPathProvider
             //if (base.FileExists(virtualPath)) return base.GetFile(virtualPath);
             var resource = GetResourceFromVirtualPath(virtualPath);
             if (resource != null)
-                return new EmbeddedResourceVirtualFile(virtualPath, resource, CacheControl(resource));
+                return new ResourceVirtualFile(virtualPath, resource, CacheControl(resource));
             return base.GetFile(virtualPath);
         }
 
@@ -81,20 +85,20 @@ namespace EmbeddedResourceVirtualPathProvider
             return base.GetCacheKey(virtualPath);
         }
         
-        public EmbeddedResource GetResourceFromVirtualPath(string virtualPath)
+        public Resource GetResourceFromVirtualPath(string virtualPath)
         {
             var path = VirtualPathUtility.ToAppRelative(virtualPath).TrimStart('~', '/');
-            var index = path.LastIndexOf("/");
+            var index = path.LastIndexOf("/", StringComparison.Ordinal);
             if (index != -1)
             {
-                var folder = path.Substring(0, index).Replace("-", "_"); //embedded resources with "-"in their folder names are stored as "_".
+                var folder = path.Substring(0, index).Replace("-", "_"); //resources with "-"in their folder names are stored as "_".
                 path = folder + path.Substring(index);
             }
             var cleanedPath = path;
             var key = (cleanedPath).ToLowerInvariant();
-            if (resources.ContainsKey(key))
+            if (_resources.ContainsKey(key))
             {
-                var resource = resources[key].FirstOrDefault(UseResource);
+                var resource = _resources[key].FirstOrDefault(UseResource);
                 if (resource != null && !ShouldUsePrevious(virtualPath, resource))
                 {
                     return resource;
@@ -119,7 +123,7 @@ namespace EmbeddedResourceVirtualPathProvider
             return null;
         }
 
-        private bool ShouldUsePrevious(string virtualPath, EmbeddedResource resource)
+        private bool ShouldUsePrevious(string virtualPath, Resource resource)
         {
             return base.FileExists(virtualPath) && UseLocalIfAvailable(resource);
         }

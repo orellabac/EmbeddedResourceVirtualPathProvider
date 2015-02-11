@@ -1,46 +1,49 @@
 ﻿using System;
 using System.Collections;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Resources;
 using System.Web;
 using System.Web.Caching;
 
-namespace EmbeddedResourceVirtualPathProvider
+namespace ResourceVirtualPathProvider
 {
-    public class EmbeddedResource
+    public class Resource
     {
-        public EmbeddedResource(Assembly assembly, string resourcePath, string projectSourcePath)
+        public Resource(Assembly assembly, string resourcePath, string projectSourcePath)
         {
-            this.AssemblyName = assembly.GetName().Name;
-            System.IO.FileInfo fileInfo = new System.IO.FileInfo(assembly.Location);
+            AssemblyName = assembly.GetName().Name;
+            FileInfo fileInfo = new FileInfo(assembly.Location);
             AssemblyLastModified = fileInfo.LastWriteTime;
-            this.ResourcePath = resourcePath;
+            ResourcePath = resourcePath;
             if (!string.IsNullOrWhiteSpace(projectSourcePath))
             {
                 var filename = GetFileNameFromProjectSourceDirectory(assembly, resourcePath, projectSourcePath);
 
                 if (filename != null) //means that the source file was found, or a copy was in the web apps folders
                 {
-                    GetCacheDependency = (utcStart) => new CacheDependency(filename, utcStart);
+                    GetCacheDependency = utcStart => new CacheDependency(filename, utcStart);
                     GetStream = () => File.OpenRead(filename);
                     return;
                 }
             }
-            GetCacheDependency = (utcStart) => new CacheDependency(assembly.Location);
+            GetCacheDependency = utcStart => new CacheDependency(assembly.Location);
 
 
 						GetStream = () =>
 						{
 							var assemblyName = assembly.GetName().Name;
 							var resourceSource = assemblyName + ".g.resources";
-							var stream = new ResourceReader(assembly.GetManifestResourceStream(resourceSource));
-							foreach(DictionaryEntry resource in stream)
+							var resourceStream = assembly.GetManifestResourceStream(resourceSource);
+							if (resourceStream != null)
 							{
-								if (resource.Key.ToString() == resourcePath)
+								var stream = new ResourceReader(resourceStream);
+								foreach(DictionaryEntry resource in stream)
 								{
-									return (Stream)resource.Value;
+									if (resource.Key.ToString() == resourcePath)
+									{
+										return (Stream)resource.Value;
+									}
 								}
 							}
 							return null;

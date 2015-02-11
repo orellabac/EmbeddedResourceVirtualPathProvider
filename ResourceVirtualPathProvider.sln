@@ -3,13 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceVirtualPathProvider", "EmbeddedResourceVirtualPathProvider\ResourceVirtualPathProvider.csproj", "{6298C7D0-B42C-4014-B5DF-E2A871832A3F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourceVirtualPathProvider", "ResourceVirtualPathProvider\ResourceVirtualPathProvider.csproj", "{6298C7D0-B42C-4014-B5DF-E2A871832A3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebProject", "TestWebProject\TestWebProject.csproj", "{9A0094B7-E767-48FA-84F1-9CD2DD73CEC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestResourceLibrary", "TestResourceLibrary\TestResourceLibrary.csproj", "{F220C6EC-A85F-41C4-BA6E-C92921DE318F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NugetTestWebProject", "NugetTestWebProject\NugetTestWebProject.csproj", "{03165E98-56F6-48B5-9D13-0CDB5FA69B26}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{4231A6F6-2A7D-4162-ADB5-92BDC2F2F51E}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
